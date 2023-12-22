@@ -1,20 +1,30 @@
+import os
 import tensorflow as tf
+import numpy as np
 
+os.system("rm -rf logs")
+os.system("mkdir logs")
 tf1 = tf.compat.v1
 tf1.disable_eager_execution()
 sess = tf1.InteractiveSession()
 
-raw_data = [1., 2., 8., -1., 0., 5.5, 6., 13]
-spikes = tf1.Variable([False]* (len(raw_data)-1), name="spikes")
-sess.run(spikes.initializer)
-saver = tf1.train.Saver()
-saver.restore(sess, "./spikes.ckpt")
-print(spikes.eval())
-#for i in range(1, len(raw_data)):
-#    if raw_data[i] - raw_data[i-1] > 5:
-#        spikes_val = spikes.eval()
-#        spikes_val[i-1] = True
-#        updater = tf1.assign(spikes, spikes_val).eval()
-#save_path = saver.save(sess, "spikes.ckpt")
-#print("spikes has been saved successfully to %s" % save_path)
-sess.close()
+raw_data = np.random.normal(10, 1, 100)
+
+alpha = tf.constant(0.05)
+curr_value = tf1.placeholder(tf.float32)
+prev_avg = tf1.Variable(0.)
+update_avg = alpha*curr_value + (1-alpha) * prev_avg
+avg_hist = tf1.summary.scalar("running_average", update_avg)
+value_hist = tf1.summary.scalar("incoming_values", curr_value)
+merged = tf1.summary.merge_all()
+writer = tf1.summary.FileWriter("./logs")
+init = tf1.global_variables_initializer()
+
+with tf1.Session() as sess:
+    sess.run(init)
+    #sess._graph._add_op(sess.graph)
+    for i in range(len(raw_data)):
+        summary_str, curr_avg = sess.run([merged, update_avg],feed_dict={curr_value:raw_data[i]})
+        sess.run(tf1.assign(prev_avg, curr_avg))
+        print(raw_data[i], curr_avg)
+        writer.add_summary(summary_str, i)
