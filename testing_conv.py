@@ -51,8 +51,6 @@ model.load_state_dict(torch.load("cifar10model-epoch6.pth"))
 classes = ["airplane", "automobile", "bird", "cat", "deer", "dog", "frog", "horse", "ship", "truck"]
 for inputs, labels in test:
     y_pred = model(inputs)
-    y_pred = y_pred.view(-1,10).detach().numpy()
-    index = y_pred.argmax()
-    print(index)
-    print(classes[index])
-    
+    for t in y_pred:
+        index = t.detach().numpy().argmax()
+        print(classes[index])
