@@ -48,8 +48,11 @@ class CIFAR10Model(nn.Module):
 
 model = CIFAR10Model()
 model.load_state_dict(torch.load("cifar10model-epoch6.pth"))
-
+classes = ["airplane", "automobile", "bird", "cat", "deer", "dog", "frog", "horse", "ship", "truck"]
 for inputs, labels in test:
     y_pred = model(inputs)
-    name = max(y_pred.)                                                                                                                       
-    print(y_pred)
+    y_pred = y_pred.view(-1,10).detach().numpy()
+    index = y_pred.argmax()
+    print(index)
+    print(classes[index])
+    
