@@ -51,4 +51,5 @@ model.load_state_dict(torch.load("cifar10model-epoch6.pth"))
 
 for inputs, labels in test:
     y_pred = model(inputs)
+    name = max(y_pred.)                                                                                                                       
     print(y_pred)
