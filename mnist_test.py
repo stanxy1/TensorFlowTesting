@@ -7,7 +7,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 data_from_csv = pd.read_csv("./mnist/mnist_test.csv").to_numpy()
-labels_csv = torch.tensor(data_from_csv[:, 0], dtype=torch.long)
+labels_csv = torch.tensor(data_from_csv[:, 0].data, dtype=torch.long)
 train_test_data_csv = torch.tensor(data_from_csv[:, 1:], dtype=torch.float32)
 
 x_train, x_test, y_train, y_test = train_test_split(train_test_data_csv, labels_csv, shuffle=True, random_state=2024, test_size=0.2)
@@ -25,19 +25,19 @@ class Conv_Network(nn.Module):
     def __init__(self):
         super(Conv_Network, self).__init__()
         self.conv_unit_1 = nn.Sequential(
-            nn.Conv2d(1, 16, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(16),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2)
-        )
-        self.conv_unit_2 = nn.Sequential(
-            nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(1, 32, kernel_size=2, stride=1, padding=1),
             nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2)
         )
-        self.fc1 = nn.Linear(32*7*7, 128)
-        self.fc2 = nn.Linear(128, 10)
+        self.conv_unit_2 = nn.Sequential(
+            nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
+        self.fc1 = nn.Linear(64*7*7, 512)
+        self.fc2 = nn.Linear(512, 10)
 
     def forward(self, x):
         out = self.conv_unit_1(x)
