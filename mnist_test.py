@@ -78,3 +78,4 @@ for epoch in range(num_epochs):
     
     print("Epoch: %d, the most recent training loss: %.4f" % (epoch, loss))
     evaluate(test_loader)
+torch.save(model.state_dict(), "mnist_conv.pth")

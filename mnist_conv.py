@@ -12,7 +12,7 @@ train_test_data_csv = data_from_csv[:, 1:]
 labels_csv = labels_csv.flatten()
 x_train, x_test, y_train, y_test = train_test_split(train_test_data_csv, labels_csv, shuffle=True, random_state=2024, test_size=0.2)
 
-x_train = x_train.reshape(x_train.shape[0], 1, 28, 28)
+x_train = x_train.reshape(x_train.shape[0], 1, 28, 28) 
 x_test = x_test.reshape(x_test.shape[0], 1, 28, 28)
 
 x_train = x_train/255.0
@@ -58,7 +58,7 @@ def evaluate(data_loader):
         
     print("Validation set loss is %.4f" % loss)
 model = Conv_Network()
-optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 loss_func = nn.CrossEntropyLoss()
 num_epochs = 10
 for epoch in range(num_epochs):
@@ -71,5 +71,6 @@ for epoch in range(num_epochs):
         optimizer.step()
     print("Epoch: {}, the most recent training loss: {}".format(epoch,loss))
     evaluate(test_loader)
+torch.save(model.state_dict(), "mnist_conv.pth")
 
         
