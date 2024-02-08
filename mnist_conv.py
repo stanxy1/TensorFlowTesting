@@ -64,7 +64,7 @@ num_epochs = 10
 for epoch in range(num_epochs):
     for data, labels in train_loader:
         output = model(data)
-
+        
         loss = loss_func(output, labels)
         model.zero_grad()
         loss.backward()

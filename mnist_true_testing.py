@@ -40,7 +40,9 @@ pos_classes = ['1','2','3','4','5','6','7','8','9']
 for img_data,labels in test_loader:
      
     output = model(img_data)
+   
+    print(output)
     for t in output:
-        index = (t.detach().numpy().argmin())-1
+        index = (t.detach().numpy().argmax())-1
         print(pos_classes[index])
     
