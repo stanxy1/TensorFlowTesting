@@ -15,6 +15,14 @@ transform_imgs = transforms.Compose([
     transforms.ToTensor(),
     transforms.Resize(255),
     transforms.CenterCrop(244),
-    transforms.Normalize()
+    #transforms.Normalize()
 ])
-datasets_folder = datasets.ImageFolder("./PetImages", transform=transform_imgs)
+datasets_folder = datasets.ImageFolder("../cifar_10_network/test/", transform=transform_imgs)
+x_train, x_test = train_test_split(datasets_folder, test_size=0.2)
+for i in x_train:
+    x_train = i[0]
+print(x_train.shape)
+print("----------------")
+
+print(x_train.shape)
+print("----------------")
