@@ -44,7 +44,7 @@ class Conv_Network(nn.Module):
         out = self.conv_unit_1(x)
         out = self.conv_unit_2(out)
         out = out.view(out.size(0), -1)
-        out = self.fc1(out)
+        out = F.relu(self.fc1(out))
         out = self.fc2(out)
         out = F.log_softmax(out, dim=1)
         return out
@@ -72,5 +72,3 @@ for epoch in range(num_epochs):
     print("Epoch: {}, the most recent training loss: {}".format(epoch,loss))
     evaluate(test_loader)
 torch.save(model.state_dict(), "mnist_conv.pth")
-
-        
