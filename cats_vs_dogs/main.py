@@ -17,19 +17,11 @@ transform_imgs = transforms.Compose([
     transforms.CenterCrop(224), 
     transforms.Normalize(mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225])
 ])
-datasets_folder = datasets.ImageFolder("./PetImages", transform=transform_imgs)
+test_img = datasets.ImageFolder("./archive/train", transform=transform_imgs)
+val_img = datasets.ImageFolder("./archive/test", transform=transform_imgs)
 
-img_labels = torch.Tensor(len(datasets_folder))
-img_data = torch.Tensor(len(datasets_folder), 3, 224, 224)
-for i in range(len(datasets_folder)):
-    img_labels[i] = (datasets_folder[i][1])
-for i in range(len(datasets_folder)):
-    for j in range(3):
-        img_data[i][j] = datasets_folder[i][0][j]
-x_train, x_val, y_train, y_val = train_test_split(img_data, img_labels, shuffle=True, random_state=2024, test_size=0.2)
-
-train_loader = torch.utils.data.DataLoader((x_train, y_train), batch_size=64)
-val_loader = torch.utils.data.DataLoader((x_val, y_val), batch_size=64)
+train_loader = torch.utils.data.DataLoader(test_img, batch_size=64)
+val_loader = torch.utils.data.DataLoader(val_img, batch_size=64)
 
 class CNN(nn.Module):
     def __init__(self):
@@ -58,6 +50,7 @@ class CNN(nn.Module):
         out = self.conv_unit_2(out)
         out = self.conv_unit_3(out)
         out = self.conv_unit_4(out)
+        out = out.view(out.size(0), -1)
         out = self.fc1(out)
         out = self.fc2(out)
         out = self.final(out)
@@ -91,7 +84,7 @@ for epoch in range(num_epochs):
         images = images.to(device)
         labels = labels.to(device)
         outputs = model(images)
-        loss = loss_func(outputs.float(), images.float())
+        loss = loss_func(outputs.float(), labels.float().view(-1,1))
         model.zero_grad()
         loss.backward()
         optimizer.step()
@@ -100,4 +93,3 @@ for epoch in range(num_epochs):
     evaluate(model, val_loader)
         
 #print("----------------")
-
