@@ -20,7 +20,7 @@ transform_imgs = transforms.Compose([
 datasets_folder = datasets.ImageFolder("./PetImages", transform=transform_imgs)
 
 img_labels = torch.Tensor(len(datasets_folder))
-img_data = torch.Tensor(len(datasets_folder), 3, 255, 255)
+img_data = torch.Tensor(len(datasets_folder), 3, 224, 224)
 for i in range(len(datasets_folder)):
     img_labels[i] = (datasets_folder[i][1])
 for i in range(len(datasets_folder)):
