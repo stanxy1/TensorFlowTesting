@@ -17,7 +17,7 @@ transform_imgs = transforms.Compose([
     transforms.CenterCrop(224), 
     transforms.Normalize(mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225])
 ])
-datasets_folder = datasets.ImageFolder("../cifar_10_network/test/", transform=transform_imgs)
+datasets_folder = datasets.ImageFolder("./PetImages", transform=transform_imgs)
 
 img_labels = torch.Tensor(len(datasets_folder))
 img_data = torch.Tensor(len(datasets_folder), 3, 255, 255)
