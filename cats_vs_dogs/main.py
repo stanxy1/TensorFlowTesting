@@ -13,15 +13,15 @@ else:
     device = torch.device("cpu")
 transform_imgs = transforms.Compose([
     transforms.ToTensor(),
-    transforms.Resize(255), #(255, 255) ???
-    transforms.CenterCrop(224), 
+    transforms.Resize((255, 255)), #(255, 255) ???
+    transforms.CenterCrop((224, 224)), 
     transforms.Normalize(mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225])
 ])
 test_img = datasets.ImageFolder("./archive/train", transform=transform_imgs)
 val_img = datasets.ImageFolder("./archive/test", transform=transform_imgs)
 
-train_loader = torch.utils.data.DataLoader(test_img, batch_size=64)
-val_loader = torch.utils.data.DataLoader(val_img, batch_size=64)
+train_loader = torch.utils.data.DataLoader(test_img, batch_size=32)
+val_loader = torch.utils.data.DataLoader(val_img, batch_size=32)
 
 class CNN(nn.Module):
     def __init__(self):
@@ -56,7 +56,7 @@ class CNN(nn.Module):
         out = self.final(out)
         return out
 def evaluate(model, data_loader):
-    loss = []
+    #loss = []
     correct = 0.
     with torch.no_grad():
         for images, labels in data_loader:
@@ -71,7 +71,7 @@ def evaluate(model, data_loader):
                 torch.cuda.empty_cache()
     print('\nVal Accuracy: {}/{} ({:.3f}%)\n'.format(correct, len(data_loader.dataset), 100. * correct/len(data_loader.dataset)))
 model = CNN()
-model.cuda()
+#model.cuda()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 loss_func = nn.BCELoss()
 total_step = len(train_loader)
@@ -85,10 +85,10 @@ for epoch in range(num_epochs):
         labels = labels.to(device)
         outputs = model(images)
         loss = loss_func(outputs.float(), labels.float().view(-1,1))
-        model.zero_grad()
+        optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        train_loss += loss.item() * labels.size(0)
+        #train_loss += loss.item() * labels.size(0)
     print('Epoch [{}/{}], Loss: {:.4f}'.format(epoch+1, num_epochs, loss.item()))
     evaluate(model, val_loader)
         
