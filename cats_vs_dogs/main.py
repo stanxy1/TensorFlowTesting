@@ -84,7 +84,7 @@ for epoch in range(num_epochs):
         images = images.to(device)
         labels = labels.to(device)
         outputs = model(images)
-        loss = loss_func(outputs.float(), labels.float().view(-1,1))
+        loss = loss_func(outputs, labels)
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
