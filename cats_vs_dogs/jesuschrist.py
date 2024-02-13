@@ -65,5 +65,5 @@ for epoch in range(num_epochs):
         loss.backward()
         optimizer.step()
         train_loss += loss.item() * labels.size(0)
-    print('Epoch [{}/{}], Loss: {:.4f}'.format(epoch+1, num_epochs, loss.item()))
+    print('Epoch [{}/{}], Loss: {:.4f}'.format(epoch+1, num_epochs, train_loss/len(train_loader)))
     evaluate(model, val_loader)

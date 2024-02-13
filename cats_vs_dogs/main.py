@@ -43,15 +43,17 @@ class CNN(nn.Module):
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
         self.fc1 = nn.Linear(14*14*128, 128)
+        self.drop = nn.Dropout(0.5)
         self.fc2 = nn.Linear(128, 1)
         self.final = nn.Sigmoid()
+        
     def forward(self, x):
         out = self.conv_unit_1(x)
         out = self.conv_unit_2(out)
         out = self.conv_unit_3(out)
         out = self.conv_unit_4(out)
         out = out.view(out.size(0), -1)
-        out = self.fc1(out)
+        out = self.drop(self.fc1(out))
         out = self.fc2(out)
         out = self.final(out)
         return out
