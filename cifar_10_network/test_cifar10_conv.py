@@ -7,8 +7,8 @@ from torch.utils.data import DataLoader
 
 transforms = Compose([ToTensor(), Resize((32, 32))])
 trainset = ImageFolder(root='test/', transform=transforms)
-batch_size = 3
-test = DataLoader(trainset, batch_size=batch_size, shuffle=True)
+batch_size = 32
+test = DataLoader(trainset, batch_size=batch_size, shuffle=False)
 
 class CIFAR10Model(nn.Module):
     def __init__(self):
@@ -51,6 +51,7 @@ model.load_state_dict(torch.load("cifar10model-epoch6.pth"))
 classes = ["airplane", "automobile", "bird", "cat", "deer", "dog", "frog", "horse", "ship", "truck"]
 for inputs, labels in test:
     y_pred = model(inputs)
+    #print(y_pred)
     for t in y_pred:
         index = t.detach().numpy().argmax()
         print(classes[index])

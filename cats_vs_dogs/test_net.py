@@ -1,6 +1,6 @@
 import torchvision.transforms as transforms
 from torchvision.datasets import ImageFolder
-import torch.utils.data.dataloader as DataLoader
+from torch.utils.data import DataLoader
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -17,7 +17,7 @@ transform_imgs = transforms.Compose([
 ])
 
 imgs_data = ImageFolder("./test_set", transform=transform_imgs)
-testing_loader = DataLoader(imgs_data, batch_size=1, shuffle=False)
+testing_loader = DataLoader(imgs_data)
 
 class Net(nn.Module):
     def __init__(self):

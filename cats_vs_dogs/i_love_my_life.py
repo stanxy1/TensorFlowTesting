@@ -48,13 +48,13 @@ class Net(nn.Module):
 
 # Instantiate the network and move it to the GPU if available
 model = Net().to(device)
-
+model.load_state_dict(torch.load("myLittleModel.pth"))
 # Define loss function and optimizer
 criterion = nn.BCELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 # Training loop
-for epoch in range(10):  # loop over the dataset multiple times
+for epoch in range(15):  # loop over the dataset multiple times
     running_loss = 0.0
     for i, data in enumerate(train_loader, 0):
         inputs, labels = data[0].to(device), data[1].to(device)
@@ -66,5 +66,6 @@ for epoch in range(10):  # loop over the dataset multiple times
 
         running_loss += loss.item() * inputs.size(0)
     print(f"Epoch {epoch + 1}, Loss: {running_loss/len(train_loader)}")
-torch.save(model.state_dict, "myLittleModel.pth")
+    if(epoch%3==0):
+        torch.save(model.state_dict(), "myLittleModel.pth")
 print('Finished Training')
