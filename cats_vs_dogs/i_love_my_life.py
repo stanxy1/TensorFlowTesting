@@ -66,6 +66,6 @@ for epoch in range(15):  # loop over the dataset multiple times
 
         running_loss += loss.item() * inputs.size(0)
     print(f"Epoch {epoch + 1}, Loss: {running_loss/len(train_loader)}")
-    if(epoch%3==0):
+    if(epoch%1==0):
         torch.save(model.state_dict(), "myLittleModel.pth")
 print('Finished Training')
