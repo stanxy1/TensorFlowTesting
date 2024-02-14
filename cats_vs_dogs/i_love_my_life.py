@@ -20,8 +20,8 @@ train_data = datasets.ImageFolder(root='./archive/train', transform=transform)
 test_data = datasets.ImageFolder(root='./archive/test', transform=transform)
 
 # Create dataloaders
-train_loader = DataLoader(train_data, batch_size=32, shuffle=True)
-test_loader = DataLoader(test_data, batch_size=32, shuffle=True)
+train_loader = DataLoader(train_data, batch_size=64, shuffle=True)
+test_loader = DataLoader(test_data, batch_size=64, shuffle=True)
 
 # Define the CNN architecture
 class Net(nn.Module):
