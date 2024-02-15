@@ -58,7 +58,7 @@ class CIFAR10Model(nn.Module):
         return x
 
 model = CIFAR10Model()
-#model.load_state_dict(torch.load("cifar10model-epoch6.pth"))
+model.load_state_dict(torch.load("cifar10model-epoch8.pth"))
 loss_fn = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
