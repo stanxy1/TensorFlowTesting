@@ -22,7 +22,7 @@ class CIFAR10Model(nn.Module):
         self.conv2 = nn.Conv2d(16, 32, kernel_size=(3,3), stride=1, padding=1)
         self.act2 = nn.ReLU()
         self.pool2 = nn.MaxPool2d(kernel_size=(2, 2))
-        self.drop2 = nn.dropout(0.5)
+        self.drop2 = nn.Dropout(0.5)
         
         self.conv3 = nn.Conv2d(32, 64, kernel_size=(3,3), stride=1, padding=1)
         self.act3 = nn.ReLU()
@@ -50,15 +50,15 @@ class CIFAR10Model(nn.Module):
         x = self.pool3(x)
 
         x = self.flat(x)
-        # input 4096, output 512
+        
         x = self.act3(self.fc3(x))
         x = self.drop3(x)
-        # input 512, output 10
+        
         x = self.fc4(x)
         return x
 
 model = CIFAR10Model()
-model.load_state_dict(torch.load("cifar10model-epoch6.pth"))
+#model.load_state_dict(torch.load("cifar10model-epoch6.pth"))
 loss_fn = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
@@ -67,6 +67,7 @@ for epoch in range(n_epochs):
     for inputs, labels in trainloader:
         # forward, backward, and then weight update
         y_pred = model(inputs)
+        
         loss = loss_fn(y_pred, labels)
         optimizer.zero_grad()
         loss.backward()
